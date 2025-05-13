@@ -1,0 +1,265 @@
+/* Careers Page Specific Styles */
+
+/* Hero Section */
+.careers-hero {
+  background-image: linear-gradient(rgba(11, 36, 71, 0.8), rgba(11, 36, 71, 0.8)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Why Work With Us */
+.why-work {
+  background-color: var(--light);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.benefit-card {
+  padding: var(--spacing-4);
+  background-color: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-md);
+}
+
+.benefit-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary);
+  border-radius: 50%;
+  margin-bottom: var(--spacing-3);
+  color: var(--primary);
+}
+
+.benefit-card h3 {
+  margin-bottom: var(--spacing-2);
+  font-size: 1.25rem;
+  color: var(--primary);
+}
+
+.benefit-card p {
+  color: var(--gray);
+}
+
+/* Culture Section */
+.culture-section {
+  background-color: white;
+}
+
+.culture-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-5);
+  align-items: center;
+}
+
+.culture-text h2 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-3);
+  color: var(--primary);
+}
+
+.culture-text p {
+  margin-bottom: var(--spacing-3);
+  color: var(--gray-dark);
+}
+
+.culture-image {
+  width: 100%;
+  height: 0;
+  padding-bottom: 66.67%;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+
+.culture-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.culture-image:hover img {
+  transform: scale(1.05);
+}
+
+/* Open Positions */
+.open-positions {
+  background-color: var(--light);
+}
+
+.positions-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+  color: var(--gray-dark);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.positions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.position-card {
+  background-color: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.position-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.position-header {
+  padding: var(--spacing-3) var(--spacing-3) var(--spacing-2);
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.position-header h3 {
+  margin-bottom: var(--spacing-1);
+  font-size: 1.125rem;
+  color: var(--primary);
+}
+
+.location {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--gray);
+}
+
+.position-details {
+  padding: var(--spacing-3);
+  flex-grow: 1;
+}
+
+.position-details p {
+  margin-bottom: var(--spacing-2);
+  color: var(--gray-dark);
+}
+
+.position-meta {
+  display: flex;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+}
+
+.experience,
+.job-type {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: var(--secondary);
+  color: var(--primary);
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.apply-btn {
+  margin: var(--spacing-3);
+  margin-top: auto;
+}
+
+/* Application Form */
+.application-section {
+  background-color: white;
+}
+
+.application-form {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--light);
+  padding: var(--spacing-4);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-3);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .culture-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+  
+  .culture-text {
+    order: 1;
+  }
+  
+  .culture-image {
+    order: 0;
+  }
+  
+  .positions-filter {
+    flex-wrap: wrap;
+  }
+  
+  .filter-btn {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .benefit-card,
+  .position-card {
+    padding: var(--spacing-3);
+  }
+  
+  .position-header h3 {
+    font-size: 1rem;
+  }
+  
+  .application-form {
+    padding: var(--spacing-3);
+  }
+}

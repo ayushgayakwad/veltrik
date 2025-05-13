@@ -1,0 +1,114 @@
+/* Hero Section */
+.hero {
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-image: linear-gradient(rgba(11, 36, 71, 0.8), rgba(11, 36, 71, 0.8)), url('../images/image4.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  padding-top: var(--header-height);
+}
+
+.hero-content {
+  max-width: 800px;
+  padding: 0 var(--spacing-3);
+}
+
+.hero h2 {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-3);
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-4);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Projects Gallery */
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.project-item {
+  position: relative;
+  height: 300px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.project-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: var(--spacing-3);
+  color: white;
+  transform: translateY(20px);
+  opacity: 0.9;
+  transition: var(--transition);
+}
+
+.project-item:hover .project-image {
+  transform: scale(1.1);
+}
+
+.project-item:hover .project-overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.project-overlay h3 {
+  margin-bottom: var(--spacing-1);
+  font-size: 1.25rem;
+}
+
+.project-overlay p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: auto;
+    min-height: 500px;
+  }
+  
+  .hero h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero h2 {
+    font-size: 1.75rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+}
