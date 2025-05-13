@@ -100,6 +100,17 @@
         overflow: auto;
         color: var(--text-primary);
     }
+    
+    .logo-container {
+        width: auto;
+        text-align: center;
+    }
+    
+    .logo {
+        width: 10%;
+        height: auto;
+        margin: 1rem;   
+    }
 
     .form-container {
         position: relative; 
@@ -204,7 +215,6 @@
         color: var(--primary-light);
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
         .form-container {
             padding: 20px;
@@ -265,6 +275,9 @@
 </style>
 </head>
 <body>
+  <div class="logo-container">
+    <img src="images/logo1.jpg" alt="Veltrik Logo" class="logo">
+  </div>
   <div class="form-container">
     <h1>Register</h1>
     <form id="registerForm" onsubmit="submitForm(event)" enctype="multipart/form-data">

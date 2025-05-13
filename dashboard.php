@@ -43,10 +43,8 @@
         die("Error fetching user data: " . $e->getMessage());
     }
     
-    // Get first letter of name for avatar
     $firstLetter = strtoupper(substr($user['name'], 0, 1));
     
-    // Format current date
     $currentDate = date("F j, Y");
     ?>
 
@@ -637,7 +635,7 @@
     <div class="dashboard">
         <div class="dashboard-main">
             <aside class="profile-sidebar">
-                <img src="images/logo1.jpg" alt="VisionAstraa Logo" class="logo">
+                <img src="images/logo1.jpg" alt="Veltrik Logo" class="logo">
                 <div class="profile-header">
                     <div class="profile-avatar">
                         <span class="profile-avatar-text"><?php echo $firstLetter; ?></span>
@@ -708,7 +706,6 @@
                 </div>
             </aside>
             
-            <!-- Main Content Area -->
             <main class="content-area">
                 <div class="dashboard-header">
                     <div class="welcome-section">
@@ -720,7 +717,6 @@
                     </div>
                 </div>
                 
-                <!-- Tab Navigation -->
                 <div class="tab-navigation">
                     <div class="tab-item active" data-tab="profile">
                         <i class="fas fa-user"></i> Profile
@@ -733,7 +729,6 @@
                     </div>
                 </div>
                 
-                <!-- Tab Content -->
                 <div id="profile-tab" class="tab-content active">
                     <div class="info-section">
                         <div class="info-section-header">
@@ -831,38 +826,17 @@
     </div>
 
     <script>
-        // Fetch and insert navbar
-        fetch('navbarcomp-VA/navbar.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-placeholder').innerHTML = data;
-
-                const hamburger = document.getElementById("hamburger");
-                const navLinks = document.getElementById("nav-links");
-
-                if (hamburger && navLinks) {
-                    hamburger.onclick = function () {
-                        navLinks.classList.toggle("active");
-                    };
-                }
-            })
-            .catch(error => console.error('Error loading navbar:', error));
-            
-        // Tab navigation
         document.addEventListener('DOMContentLoaded', function() {
             const tabItems = document.querySelectorAll('.tab-item');
             const tabContents = document.querySelectorAll('.tab-content');
             
             tabItems.forEach(item => {
                 item.addEventListener('click', function() {
-                    // Remove active class from all tabs
                     tabItems.forEach(tab => tab.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
                     
-                    // Add active class to clicked tab
                     this.classList.add('active');
                     
-                    // Show corresponding content
                     const tabId = this.getAttribute('data-tab');
                     document.getElementById(tabId + '-tab').classList.add('active');
                 });
