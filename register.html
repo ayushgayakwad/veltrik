@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
 
@@ -34,7 +36,7 @@
           
           user.sendEmailVerification()
             .then(() => {
-              alert("Verification email sent. Please verify your email.");
+              showVerificationPopup();
               saveUserData(user);
             })
             .catch((error) => console.error("Email verification error:", error));
@@ -53,7 +55,7 @@
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          alert("Registration successful!");
+          
         } else {
           alert("Registration failed: " + data.error);
         }
@@ -213,6 +215,66 @@
 
     .message a:hover {
         color: var(--primary-light);
+    }
+
+    .popup {
+        display: flex;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .popup-content {
+        background-color: var(--bg-white);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .popup-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .popup-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: var(--success);
+    }
+
+    .popup-text {
+        font-size: 16px;
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+    }
+
+    .btn-secondary {
+        background-color: var(--secondary);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--primary-dark);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 
     @media (max-width: 768px) {
@@ -380,7 +442,22 @@
         <button type="submit">Register</button>
     </form>
     <p class="login-text">Have an account? <a href="login.html">Login here</a>.</p>
+    <div id="verification-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-envelope" style="color: var(--success);"></i>
+            </div>
+            <h2 class="popup-title">Verification Email Sent</h2>
+            <p class="popup-text">Please check your email inbox and verify your email address to complete registration.</p>
+            <button class="btn btn-secondary" onclick="window.location.href='login.html'">Continue</button>
+        </div>
+    </div>
 </body>
+<script>
+    function showVerificationPopup() {
+        document.getElementById('verification-popup').style.display = 'flex';
+    }
+</script>
 <script>
     const collegesByState = {
             "Andhra Pradesh": [
