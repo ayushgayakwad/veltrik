@@ -65,10 +65,11 @@ if ($specialization === 'electrical') {
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['answers']) || isset($_POST['subjective_answer'])) {
+    if (isset($_POST['answers'])) {
         $question_id = $_POST['question_id'];
+        $selected_answer = $_POST['answers'];
 
-        $stmt = $pdo->prepare("SELECT correct_option, marks, qtype FROM $question_table WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT correct_option, marks FROM $question_table WHERE id = ?");
         $stmt->execute([$question_id]);
         $question = $stmt->fetch();
 
@@ -77,66 +78,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['total_marks'] = 0;
             }
 
-            $qtype = $question['qtype'];
-
             if (isset($_SESSION['answers'][$question_id])) {
-                $prev_answer = $_SESSION['answers'][$question_id];
-                if (
-                    ($qtype === 'objective' && $prev_answer == $question['correct_option']) ||
-                    ($qtype === 'subjective' && strtolower(trim($prev_answer)) == strtolower(trim($question['correct_option'])))
-                ) {
+                $previous_answer = $_SESSION['answers'][$question_id];
+
+                if ($previous_answer == $question['correct_option']) {
                     $_SESSION['total_marks'] -= $question['marks'];
                 }
             }
 
-            if ($qtype === 'objective') {
-                $selected_answer = $_POST['answers'];
-                $_SESSION['answers'][$question_id] = $selected_answer;
+            $_SESSION['answers'][$question_id] = $selected_answer;
 
-                if ($selected_answer == $question['correct_option']) {
-                    $_SESSION['total_marks'] += $question['marks'];
-                }
-
-            } elseif ($qtype === 'subjective') {
-                $user_answer = trim($_POST['subjective_answer']);
-                $_SESSION['answers'][$question_id] = $user_answer;
-
-                if (strtolower($user_answer) == strtolower(trim($question['correct_option']))) {
-                    $_SESSION['total_marks'] += $question['marks'];
-                }
+            if ($selected_answer == $question['correct_option']) {
+                $_SESSION['total_marks'] += $question['marks'];
             }
         }
     }
 
     if (isset($_POST['submit_quiz'])) {
         $final_marks = 0;
-
+    
         foreach ($_SESSION['answers'] as $qid => $answer) {
-            $stmt = $pdo->prepare("SELECT correct_option, marks, qtype FROM $question_table WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT correct_option, marks FROM $question_table WHERE id = ?");
             $stmt->execute([$qid]);
             $question = $stmt->fetch();
-
-            if ($question) {
-                if (
-                    ($question['qtype'] === 'objective' && $answer == $question['correct_option']) ||
-                    ($question['qtype'] === 'subjective' && strtolower(trim($answer)) == strtolower(trim($question['correct_option'])))
-                ) {
-                    $final_marks += $question['marks'];
-                }
+    
+            if ($question && $question['correct_option'] == $answer) {
+                $final_marks += $question['marks'];
             }
         }
-
+    
         $_SESSION['total_marks'] = $final_marks;
-
+    
         $stmt = $pdo->prepare("INSERT INTO quiz_results (user_id, total_marks) VALUES (?, ?)");
         $stmt->execute([$user_id, $final_marks]);
-
+    
         $_SESSION['quiz_submitted'] = true;
         header("Location: dashboard.php?quiz_submitted=1");
         exit();
     }
 }
-
 
 $question_ids = range(1, 30); 
 shuffle($question_ids); 
@@ -313,29 +293,6 @@ if ($time_left <= 0) {
             background-color: var(--primary-light);
             border-color: var(--primary-dark);
         }
-        
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 14px 16px;
-            font-size: 16px;
-            border: 1px solid var(--border-medium);
-            border-radius: 8px;
-            background-color: var(--bg-lighter);
-            color: var(--text-primary);
-            font-family: 'Roboto', sans-serif;
-            resize: vertical;
-            box-shadow: var(--shadow-sm);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            margin: 10px 0;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-            background-color: var(--bg-white);
-        }
 
         .btn-container {
             display: flex;
@@ -396,22 +353,12 @@ if ($time_left <= 0) {
             <div class="question">
                 <p><strong>Question <?php echo $current_question_index + 1; ?>: <?php echo htmlspecialchars($question['question']); ?></strong></p>
             </div>
-            
-            <?php if (!empty($question['img_url'])): ?>
-                <div class="question-image" style="text-align:center; margin:20px 0;">
-                    <img src="<?php echo htmlspecialchars($question['img_url']); ?>" alt="Question Image" style="max-width:100%; height:auto;">
-                </div>
-            <?php endif; ?>
 
             <div class="options">
-                <?php if ($question['qtype'] === 'objective'): ?>
-                    <label><input type="radio" name="answers" value="1" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 1) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_1']); ?></label>
-                    <label><input type="radio" name="answers" value="2" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 2) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_2']); ?></label>
-                    <label><input type="radio" name="answers" value="3" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 3) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_3']); ?></label>
-                    <label><input type="radio" name="answers" value="4" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 4) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_4']); ?></label>
-                <?php elseif ($question['qtype'] === 'subjective'): ?>
-                    <textarea name="subjective_answer" rows="5" style="width: 100%; padding: 10px;" placeholder="Type your answer here..." onblur="this.form.submit();"><?php echo isset($_SESSION['answers'][$current_question_id]) ? htmlspecialchars($_SESSION['answers'][$current_question_id]) : ''; ?></textarea>
-                <?php endif; ?>
+                <label><input type="radio" name="answers" value="1" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 1) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_1']); ?></label>
+                <label><input type="radio" name="answers" value="2" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 2) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_2']); ?></label>
+                <label><input type="radio" name="answers" value="3" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 3) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_3']); ?></label>
+                <label><input type="radio" name="answers" value="4" <?php echo (isset($_SESSION['answers'][$current_question_id]) && $_SESSION['answers'][$current_question_id] == 4) ? 'checked' : ''; ?> onchange="this.form.submit();"> <?php echo htmlspecialchars($question['option_4']); ?></label>
             </div>
 
             <input type="hidden" name="question_id" value="<?php echo $question['id']; ?>">
