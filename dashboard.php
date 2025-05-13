@@ -691,11 +691,15 @@
                             die("Error checking quiz submission: " . $e->getMessage());
                         }
                     ?>
-                    <a href="<?php echo $quiz_result ? '#' : 'quiz.php'; ?>" class="btn btn-primary" 
-                       <?php echo $quiz_result ? 'onclick="alert(\'You have already taken the quiz. You cannot retake it.\'); return false;"' : ''; ?>>
-                        <i class="fas fa-clipboard-list btn-icon"></i>
-                        Start Quiz
-                    </a>
+                    <?php if ($quiz_result): ?>
+                        <a href="#" class="btn btn-primary" onclick="showAlreadyTakenPopup(); return false;">
+                            <i class="fas fa-clipboard-list btn-icon"></i> Start Quiz
+                        </a>
+                    <?php else: ?>
+                        <a href="#" class="btn btn-primary" onclick="showQuizPopup(); return false;">
+                            <i class="fas fa-clipboard-list btn-icon"></i> Start Quiz
+                        </a>
+                    <?php endif; ?>
                     
                     <a href="php/logout.php" class="btn btn-secondary">
                         <i class="fas fa-sign-out-alt btn-icon"></i>
@@ -864,6 +868,47 @@
                 });
             });
         });
+    </script>
+    <div id="quiz-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon"><i class="fas fa-exclamation-circle" style="color: #f59e0b;"></i></div>
+            <h2 class="popup-title">Ready to Begin?</h2>
+            <p class="popup-text">
+                <?php
+                    $branchMessage = "Electric Vehicle Quiz";
+                    if (stripos($user['specialization'], 'mechanical') !== false) {
+                        $branchMessage .= " for Mechanical and allied branches";
+                    } elseif (stripos($user['specialization'], 'electrical') !== false) {
+                        $branchMessage .= " for Electrical and allied branches";
+                    }
+                    echo "You are about to start the <strong>$branchMessage</strong>.";
+                ?>
+            </p>
+            <a href="quiz.php" class="btn btn-primary">Start Quiz</a>
+            <br><br>
+            <button class="btn btn-secondary" onclick="document.getElementById('quiz-popup').style.display='none';">Cancel</button>
+        </div>
+    </div>
+    
+    <div id="already-taken-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-info-circle" style="color: var(--warning);"></i>
+            </div>
+            <h2 class="popup-title">Quiz Already Taken</h2>
+            <p class="popup-text">You have already taken the quiz. You cannot retake it.</p>
+            <button class="btn btn-secondary" onclick="document.getElementById('already-taken-popup').style.display='none';">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        function showQuizPopup() {
+            document.getElementById('quiz-popup').style.display = 'flex';
+        }
+        
+        function showAlreadyTakenPopup() {
+            document.getElementById('already-taken-popup').style.display = 'flex';
+        }
     </script>
 </body>
 </html>

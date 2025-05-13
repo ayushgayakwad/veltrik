@@ -27,6 +27,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+$specialization = $_SESSION['specialization'];
 
 $host = 'localhost';
 $db = 'u707137586_User_Data';
@@ -50,12 +51,25 @@ if (!isset($_SESSION['questions_answered'])) {
     $_SESSION['questions_answered'] = [];
 }
 
+if (!isset($_SESSION['specialization'])) {
+    die("Specialization not found. Please log in again.");
+}
+
+if ($specialization === 'electrical') {
+    $question_table = 'quiz_questions_electrical';
+} elseif ($specialization === 'mechanical') {
+    $question_table = 'quiz_questions_mech';
+} else {
+    die("Unknown specialization.");
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['answers'])) {
         $question_id = $_POST['question_id'];
         $selected_answer = $_POST['answers'];
 
-        $stmt = $pdo->prepare("SELECT correct_option, marks FROM quiz_questions WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT correct_option, marks FROM $question_table WHERE id = ?");
         $stmt->execute([$question_id]);
         $question = $stmt->fetch();
 
@@ -84,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $final_marks = 0;
     
         foreach ($_SESSION['answers'] as $qid => $answer) {
-            $stmt = $pdo->prepare("SELECT correct_option, marks FROM quiz_questions WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT correct_option, marks FROM $question_table WHERE id = ?");
             $stmt->execute([$qid]);
             $question = $stmt->fetch();
     
@@ -118,7 +132,7 @@ if (!isset($_SESSION['current_question_index'])) {
 $current_question_index = $_SESSION['current_question_index'];
 $current_question_id = $_SESSION['question_order'][$current_question_index];
 
-$stmt = $pdo->prepare("SELECT * FROM quiz_questions WHERE id = ?");
+$stmt = $pdo->prepare("SELECT * FROM $question_table WHERE id = ?");
 $stmt->execute([$current_question_id]);
 $question = $stmt->fetch();
 
@@ -159,7 +173,7 @@ if ($time_left <= 0) {
         $final_marks = 0;
 
         foreach ($_SESSION['answers'] as $qid => $answer) {
-            $stmt = $pdo->prepare("SELECT correct_option, marks FROM quiz_questions WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT correct_option, marks FROM $question_table WHERE id = ?");
             $stmt->execute([$qid]);
             $question = $stmt->fetch();
 
@@ -319,7 +333,17 @@ if ($time_left <= 0) {
 </head>
 <body>
     <div class="container">
-        <h1>Electric Vehicle Quiz</h1>
+        <h1>
+            <?php
+                if ($_SESSION['specialization'] === 'mechanical') {
+                    echo "Electric Vehicle Quiz for Mechanical and allied branches";
+                } elseif ($_SESSION['specialization'] === 'electrical') {
+                    echo "Electric Vehicle Quiz for Electrical and allied branches";
+                } else {
+                    echo "Electric Vehicle Quiz";
+                }
+            ?>
+        </h1>
         
         <div class="timer">
             <p>Time left: <span id="timer"></span></p>
