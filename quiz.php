@@ -137,11 +137,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-
-$question_ids = range(1, 30); 
-shuffle($question_ids); 
-
 if (!isset($_SESSION['question_order'])) {
+    $stmt = $pdo->query("SELECT id FROM $question_table ORDER BY RAND() LIMIT 30");
+    $question_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    if (count($question_ids) < 30) {
+        die("Not enough questions in the database.");
+    }
+
     $_SESSION['question_order'] = $question_ids;
 }
 
