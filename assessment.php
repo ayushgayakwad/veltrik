@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (isset($_POST['submit_quiz'])) {
+    if (isset($_POST['submit_quiz']) || (isset($_POST['forced_submit']) && $_POST['forced_submit'] == "1")) {
         $final_marks = 0;
 
         foreach ($_SESSION['answers'] as $qid => $answer) {
@@ -541,6 +541,7 @@ if ($time_left <= 0) {
             </div>
 
             <input type="hidden" name="question_id" value="<?php echo $question['id']; ?>">
+            <input type="hidden" name="forced_submit" id="forced_submit" value="0">
 
             <div class="btn-container">
                 <?php if ($current_question_index > 0): ?>
@@ -586,6 +587,8 @@ if ($time_left <= 0) {
     </script>
 
     <script>
+        let warningShown = false;
+
         document.addEventListener('DOMContentLoaded', () => {
             navigator.mediaDevices.getUserMedia({ video: true, audio: true })
                 .then((stream) => {
@@ -595,19 +598,37 @@ if ($time_left <= 0) {
                     window.location.href = "dashboard.php?permission_denied=1";
                 });
         });
+
+        function handleViolation() {
+            if (!warningShown) {
+                warningShown = true;
+                showWarningPopup();
+            } else {
+                document.getElementById('forced_submit').value = "1";
+                document.forms[0].submit();
+            }
+        }
         
-        document.addEventListener('visibilitychange', function() {
+        document.addEventListener('visibilitychange', function () {
             if (document.hidden) {
-                document.getElementById('warning-popup').style.display = 'flex';
+                handleViolation();
             }
         });
     
+        window.addEventListener('blur', function () {
+            handleViolation();
+        });
+
         document.addEventListener('keydown', function (e) {
             if (e.ctrlKey && (e.key === 't' || e.key === 'w')) {
-                e.preventDefault(); 
-                document.getElementById('warning-popup').style.display = 'flex';
+                e.preventDefault();
+                handleViolation();
             }
         });
+
+        function showWarningPopup() {
+            document.getElementById('warning-popup').style.display = 'flex';
+        }
         
         function closePopup() {
             document.getElementById('warning-popup').style.display = 'none';
