@@ -699,11 +699,11 @@
                     ?>
                     <?php if ($quiz_result): ?>
                         <a href="#" class="btn btn-primary" onclick="showAlreadyTakenPopup(); return false;">
-                            <i class="fas fa-clipboard-list btn-icon"></i> Start Quiz
+                            <i class="fas fa-clipboard-list btn-icon"></i> Start Online Assessment
                         </a>
                     <?php else: ?>
                         <a href="#" class="btn btn-primary" onclick="showQuizPopup(); return false;">
-                            <i class="fas fa-clipboard-list btn-icon"></i> Start Quiz
+                            <i class="fas fa-clipboard-list btn-icon"></i> Start Online Assessment
                         </a>
                     <?php endif; ?>
                     

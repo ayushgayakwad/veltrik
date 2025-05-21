@@ -34,22 +34,32 @@
 
     function submitForm(event) {
       event.preventDefault();
-
+    
+      document.getElementById("loading-spinner").style.display = "block";
+    
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-
+    
       auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          
+    
           user.sendEmailVerification()
             .then(() => {
               showVerificationPopup();
               saveUserData(user);
+              document.getElementById("registerForm").reset();
             })
-            .catch((error) => console.error("Email verification error:", error));
+            .catch((error) => {
+              console.error("Email verification error:", error);
+              document.getElementById("loading-spinner").style.display = "none";
+            });
         })
-        .catch((error) => console.error("Registration error:", error));
+        .catch((error) => {
+          console.error("Registration error:", error);
+          alert("Registration failed: " + error.message);
+          document.getElementById("loading-spinner").style.display = "none";
+        });
     }
 
     function saveUserData(user) {
@@ -62,13 +72,15 @@
       })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
-          
-        } else {
-          alert("Registration failed: " + data.error);
-        }
-      })
-      .catch((error) => console.error("Data submission error:", error));
+      document.getElementById("loading-spinner").style.display = "none";
+      if (!data.success) {
+        alert("Registration failed: " + data.error);
+      }
+    })
+    .catch((error) => {
+      console.error("Data submission error:", error);
+      document.getElementById("loading-spinner").style.display = "none";
+    });
     }
   </script>
   <style>
@@ -284,6 +296,21 @@
         from { opacity: 0; }
         to { opacity: 1; }
     }
+    
+    .spinner {
+      border: 6px solid var(--bg-light);
+      border-top: 6px solid var(--primary);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
     @media (max-width: 768px) {
         .form-container {
@@ -438,20 +465,23 @@
             <option value="electrical">Electrical and allied branches</option>
         </select><br>
 
-
         <label for="graduation">Year of Graduation:</label>
-        <input type="text" id="graduation" name="graduation" pattern="\d{4}" title="Please enter a valid year." required><br>
+        <input type="text" id="graduation" name="graduation" pattern="\d{4}" title="Please enter a valid year." required>
 
         <label for="cgpa">CGPA:</label>
         <input type="text" id="cgpa" name="cgpa" required>
 
         <label for="linkedin_profile_link">LinkedIn Profile Link:</label>
-        <input type="text" id="linkedin_profile_link" name="linkedin_profile_link" 
+        <input type="text" id="linkedin_profile_link" name="linkedin_profile_link" pattern="https?://(www\.)?linkedin\.com/.*" 
             required title="Please enter a valid LinkedIn profile link"><br>
 
         <label for="Description">Describe in your own words why you should be selected for the above role:</label>
         <textarea id="Description" name="description" rows="5" cols="100" required 
             title="Enter your description here"></textarea><br>
+            
+        <div id="loading-spinner" style="display: none; text-align: center; margin-bottom: 20px;">
+            <div class="spinner"></div>
+        </div>
 
         <button type="submit">Register</button>
     </form>

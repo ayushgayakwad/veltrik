@@ -34,6 +34,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(["success" => false, "error" => "Database connection failed: " . $e->getMessage()]);
         exit();
     }
+    
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $emailExists = $stmt->fetchColumn();
+
+    if ($emailExists > 0) {
+        echo json_encode(["success" => false, "error" => "Email is already registered."]);
+        exit();
+    }
 
     try {
         $stmt = $pdo->prepare("INSERT INTO users (uid, name, email, phone, role, state, college, degree, specialization, graduation, linkedin_profile_link, description, cgpa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
