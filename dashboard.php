@@ -751,9 +751,15 @@
                     <div class="info-section-content">
                         <p>Start the online assessment to test your knowledge and skills. Please ensure you are prepared to complete it in one sitting.</p>
                         <br>
-                        <a href="#" class="btn btn-primary" onclick="showQuizPopup(); return false;">
-                            <i class="fas fa-clipboard-list btn-icon"></i> Start Online Assessment
-                        </a>
+                        <?php if ($quiz_result): ?>
+                            <a href="#" class="btn btn-primary" onclick="showAlreadyTakenPopup(); return false;">
+                                <i class="fas fa-clipboard-list btn-icon"></i> Start Online Assessment
+                            </a>
+                        <?php else: ?>
+                            <a href="#" class="btn btn-primary" onclick="showQuizPopup(); return false;">
+                                <i class="fas fa-clipboard-list btn-icon"></i> Start Online Assessment
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -853,6 +859,28 @@
             </main>
         </div>
     </div>
+    
+    <div id="instructions-popup" class="popup" style="display: none;">
+        <div class="popup-content" style="text-align: left; max-height: 80vh; overflow-y: auto;">
+            <h2 class="popup-title">Assessment Instructions</h2>
+            <div class="popup-text">
+                <ul style="padding-left: 1.5rem;">
+                    <li><b>Assessment Duration:</b> <br>You have 30 minutes to complete the assessment. The timer will start as soon as you begin the assessment.</li>
+                    <li><b>Number of Questions:</b> <br>The assessment includes 30 questions.</li>
+                    <li><b>Assessment Access:</b> <br>You are allowed to take the assessment only once and you will not be able to retake it.</li>
+                    <li><b>Starting the Assessment:</b> <br>Click on the “Start Online Assessment” button to begin. Ensure you are ready to complete the assessment in one sitting.</li>
+                    <li><b>Answering Questions:</b> <br>For each question, select the option that you believe is correct. You can change your answer at any time before submitting the assessment.</li>
+                    <li><b>Submitting the Assessment:</b> <br>Once you have answered all the questions, click the “Submit" button to finalize your answers.</li>
+                    <li><b>Time Management:</b> <br>Keep an eye on the timer displayed on the screen. The assessment will get submitted automatically once the time limit is reached.</li>
+                    <li><b>Academic Integrity:</b> <br>Ensure that you complete the assessment independently. Collaboration or cheating will not be tolerated.</li>
+                </ul>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button class="btn btn-primary" onclick="continueToQuizPopup()">Continue</button>
+                <button class="btn btn-secondary" onclick="closeInstructionsPopup()">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -906,9 +934,21 @@
     
     <script>
         function showQuizPopup() {
+            document.getElementById('instructions-popup').style.display = 'flex';
+        }
+    
+        function continueToQuizPopup() {
+            document.getElementById('instructions-popup').style.display = 'none';
             document.getElementById('quiz-popup').style.display = 'flex';
         }
-        
+    
+        function closeInstructionsPopup() {
+            document.getElementById('instructions-popup').style.display = 'none';
+        }
+    
+        function showAlreadyTakenPopup() {
+            document.getElementById('already-taken-popup').style.display = 'flex';
+        }
         function showAlreadyTakenPopup() {
             document.getElementById('already-taken-popup').style.display = 'flex';
         }
