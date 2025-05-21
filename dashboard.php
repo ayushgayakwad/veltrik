@@ -726,7 +726,10 @@
                 </div>
                 
                 <div class="tab-navigation">
-                    <div class="tab-item active" data-tab="profile">
+                    <div class="tab-item active" data-tab="assessment">
+                        <i class="fas fa-clipboard-list"></i> Assessment
+                    </div>
+                    <div class="tab-item" data-tab="profile">
                         <i class="fas fa-user"></i> Profile
                     </div>
                     <div class="tab-item" data-tab="education">
@@ -737,7 +740,25 @@
                     </div>
                 </div>
                 
-                <div id="profile-tab" class="tab-content active">
+                <div id="assessment-tab" class="tab-content active">
+                <div class="info-section">
+                    <div class="info-section-header">
+                        <h3 class="info-section-title">
+                            <i class="fas fa-clipboard-list info-section-icon"></i>
+                            Take the Assessment
+                        </h3>
+                    </div>
+                    <div class="info-section-content">
+                        <p>Start the online assessment to test your knowledge and skills. Please ensure you are prepared to complete it in one sitting.</p>
+                        <br>
+                        <a href="#" class="btn btn-primary" onclick="showQuizPopup(); return false;">
+                            <i class="fas fa-clipboard-list btn-icon"></i> Start Online Assessment
+                        </a>
+                    </div>
+                </div>
+            </div>
+                
+                <div id="profile-tab" class="tab-content">
                     <div class="info-section">
                         <div class="info-section-header">
                             <h3 class="info-section-title">
@@ -866,7 +887,7 @@
                     echo "You are about to start the <strong>$branchMessage</strong>.";
                 ?>
             </p>
-            <a href="quiz.php" class="btn btn-primary">Start Quiz</a>
+            <a href="quiz.php" class="btn btn-primary">Start Online Assessment</a>
             <br><br>
             <button class="btn btn-secondary" onclick="document.getElementById('quiz-popup').style.display='none';">Cancel</button>
         </div>
@@ -877,8 +898,8 @@
             <div class="popup-icon">
                 <i class="fas fa-info-circle" style="color: var(--warning);"></i>
             </div>
-            <h2 class="popup-title">Quiz Already Taken</h2>
-            <p class="popup-text">You have already taken the quiz. You cannot retake it.</p>
+            <h2 class="popup-title">Assessment Already Taken</h2>
+            <p class="popup-text">You have already taken the assessment. You cannot retake it.</p>
             <button class="btn btn-secondary" onclick="document.getElementById('already-taken-popup').style.display='none';">Close</button>
         </div>
     </div>
