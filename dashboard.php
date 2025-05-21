@@ -872,6 +872,10 @@
             <h2 class="popup-title">Assessment Instructions</h2>
             <div class="popup-text">
                 <ul style="padding-left: 1.5rem;">
+                    <li><b>Academic Integrity:</b> <br>Ensure that you complete the assessment independently. Collaboration or cheating will lead to disqualification.</li>
+                    <li><b>Tab Switching and Copying:</b> <br>Switching/Minimizing tabs or copying the questions are not allowed. The quiz will automatically close after the first warning if you try to switch tabs.</li>
+                    <li><b>Back Button:</b> <br>Pressing the back button during the assessment is not allowed and may cause the quiz to close.</li>
+                    <li><b>Requirements for Starting the Quiz:</b> <br>Ensure you have a stable internet connection and 25 minutes of uninterrupted time before starting the assessment.</li>
                     <li><b>Assessment Duration:</b> <br>You have 25 minutes to complete the assessment. The timer will start as soon as you begin the assessment.</li>
                     <li><b>Number of Questions:</b> <br>The assessment includes 50 questions.</li>
                     <li><b>Assessment Access:</b> <br>You are allowed to take the assessment only once and you will not be able to retake it.</li>
@@ -879,7 +883,6 @@
                     <li><b>Answering Questions:</b> <br>For each question, select the option that you believe is correct. You can change your answer at any time before submitting the assessment.</li>
                     <li><b>Submitting the Assessment:</b> <br>Once you have answered all the questions, click the “Submit" button to finalize your answers.</li>
                     <li><b>Time Management:</b> <br>Keep an eye on the timer displayed on the screen. The assessment will get submitted automatically once the time limit is reached.</li>
-                    <li><b>Academic Integrity:</b> <br>Ensure that you complete the assessment independently. Collaboration or cheating will not be tolerated.</li>
                 </ul>
             </div>
             <div style="text-align: center; margin-top: 1.5rem;">
