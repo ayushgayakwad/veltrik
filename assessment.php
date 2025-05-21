@@ -265,12 +265,18 @@ if ($time_left <= 0) {
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
+        * {
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg-light);
             color: var(--text-primary);
             margin: 0;
             padding: 0;
+            user-select: none;
         }
 
         .container {
@@ -440,6 +446,18 @@ if ($time_left <= 0) {
             </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x')) {
+                e.preventDefault(); 
+            }
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
