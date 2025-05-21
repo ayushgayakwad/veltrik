@@ -872,8 +872,8 @@
             <h2 class="popup-title">Assessment Instructions</h2>
             <div class="popup-text">
                 <ul style="padding-left: 1.5rem;">
-                    <li><b>Assessment Duration:</b> <br>You have 30 minutes to complete the assessment. The timer will start as soon as you begin the assessment.</li>
-                    <li><b>Number of Questions:</b> <br>The assessment includes 30 questions.</li>
+                    <li><b>Assessment Duration:</b> <br>You have 25 minutes to complete the assessment. The timer will start as soon as you begin the assessment.</li>
+                    <li><b>Number of Questions:</b> <br>The assessment includes 50 questions.</li>
                     <li><b>Assessment Access:</b> <br>You are allowed to take the assessment only once and you will not be able to retake it.</li>
                     <li><b>Starting the Assessment:</b> <br>Click on the “Start Online Assessment” button to begin. Ensure you are ready to complete the assessment in one sitting.</li>
                     <li><b>Answering Questions:</b> <br>For each question, select the option that you believe is correct. You can change your answer at any time before submitting the assessment.</li>
