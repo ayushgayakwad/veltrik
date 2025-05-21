@@ -54,8 +54,8 @@
                 <div class="popup-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <h2 class="popup-title">Quiz Submitted Successfully</h2>
-                <p class="popup-text">Your quiz has been submitted and recorded. Thank you for your participation!</p>
+                <h2 class="popup-title">Assessment Submitted Successfully</h2>
+                <p class="popup-text">Your assessment has been submitted and recorded. Thank you for your participation!</p>
                 <a href="dashboard.php" class="btn btn-primary">Return to Dashboard</a>
             </div>
         </div>
@@ -878,7 +878,7 @@
             <h2 class="popup-title">Ready to Begin?</h2>
             <p class="popup-text">
                 <?php
-                    $branchMessage = "Electric Vehicle Quiz";
+                    $branchMessage = "Electric Vehicle Assessment";
                     if (stripos($user['specialization'], 'mechanical') !== false) {
                         $branchMessage .= " for Mechanical and allied branches";
                     } elseif (stripos($user['specialization'], 'electrical') !== false) {
@@ -887,7 +887,7 @@
                     echo "You are about to start the <strong>$branchMessage</strong>.";
                 ?>
             </p>
-            <a href="quiz.php" class="btn btn-primary">Start Online Assessment</a>
+            <a href="assessment.php" class="btn btn-primary">Start Online Assessment</a>
             <br><br>
             <button class="btn btn-secondary" onclick="document.getElementById('quiz-popup').style.display='none';">Cancel</button>
         </div>

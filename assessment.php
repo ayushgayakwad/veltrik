@@ -161,13 +161,13 @@ $question = $stmt->fetch();
 
 if (isset($_GET['next'])) {
     $_SESSION['current_question_index']++;
-    header("Location: quiz.php");
+    header("Location: assessment.php");
     exit();
 }
 
 if (isset($_GET['previous']) && $_SESSION['current_question_index'] > 0) {
     $_SESSION['current_question_index']--;
-    header("Location: quiz.php");
+    header("Location: assessment.php");
     exit();
 }
 
@@ -231,7 +231,7 @@ if ($time_left <= 0) {
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electric Vehicle Quiz</title>
+    <title>Electric Vehicle Assessment</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -390,11 +390,11 @@ if ($time_left <= 0) {
         <h1>
             <?php
                 if ($_SESSION['specialization'] === 'mechanical') {
-                    echo "Electric Vehicle Quiz for Mechanical and allied branches";
+                    echo "Electric Vehicle Assessment for Mechanical and allied branches";
                 } elseif ($_SESSION['specialization'] === 'electrical') {
-                    echo "Electric Vehicle Quiz for Electrical and allied branches";
+                    echo "Electric Vehicle Assessment for Electrical and allied branches";
                 } else {
-                    echo "Electric Vehicle Quiz";
+                    echo "Electric Vehicle Assessment";
                 }
             ?>
         </h1>
@@ -429,11 +429,11 @@ if ($time_left <= 0) {
 
             <div class="btn-container">
                 <?php if ($current_question_index > 0): ?>
-                    <a href="quiz.php?previous=true" class="btn"><i class="fas fa-chevron-left"></i> Previous</a>
+                    <a href="assessment.php?previous=true" class="btn"><i class="fas fa-chevron-left"></i> Previous</a>
                 <?php endif; ?>
 
                 <?php if ($current_question_index < 29): ?>
-                    <a href="quiz.php?next=true" class="btn">Next <i class="fas fa-chevron-right"></i></a>
+                    <a href="assessment.php?next=true" class="btn">Next <i class="fas fa-chevron-right"></i></a>
                 <?php else: ?>
                     <button type="submit" name="submit_quiz" class="btn">Submit <i class="fas fa-check-circle"></i></button>
                 <?php endif; ?>
