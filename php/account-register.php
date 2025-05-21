@@ -5,6 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $uid = $_POST['uid'];
     $phone = $_POST['phone'];
+    $alt_phone = $_POST['alt_phone'];
     $role = $_POST['role'];
     $state = $_POST['state'];
     $college = $_POST['college'];
@@ -45,8 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        $stmt = $pdo->prepare("INSERT INTO users (uid, name, email, phone, role, state, college, degree, specialization, graduation, linkedin_profile_link, description, cgpa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$uid, $name, $email, $phone, $role, $state, $college, $degree, $specialization, $graduation, $linkedin_profile_link, $description, $cgpa]);
+        $stmt = $pdo->prepare("INSERT INTO users (uid, name, email, phone, alt_phone, role, state, college, degree, specialization, graduation, linkedin_profile_link, description, cgpa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$uid, $name, $email, $phone, $alt_phone, $role, $state, $college, $degree, $specialization, $graduation, $linkedin_profile_link, $description, $cgpa]);
         echo json_encode(["success" => true]);
     } catch (PDOException $e) {
         echo json_encode(["success" => false, "error" => "Failed to insert user: " . $e->getMessage()]);

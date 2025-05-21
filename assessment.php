@@ -507,7 +507,7 @@ if ($time_left <= 0) {
                 if ($_SESSION['specialization'] === 'mechanical') {
                     echo "Electric Vehicle Assessment for Mechanical and allied branches";
                 } elseif ($_SESSION['specialization'] === 'electrical') {
-                    echo "Electric Vehicle Assessment for Electrical and allied branches";
+                    echo "Electric Vehicle Assessment for EEE/ECE and allied branches";
                 } else {
                     echo "Electric Vehicle Assessment";
                 }

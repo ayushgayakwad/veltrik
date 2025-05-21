@@ -393,8 +393,11 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br>
 
-        <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number." required><br>
+        <label for="phone">Phone Number (WhatsApp-enabled):</label>
+        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number." placeholder="9876543210" required><br>
+        
+        <label for="alt_phone">Alternate Phone Number:</label>
+        <input type="tel" id="alt_phone" name="alt_phone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number." placeholder="9876543210" required><br>
         
         <label for="which_role_are_you_applying_for">Which Role are you applying for?</label>
         <select id="role" name="role" required>
@@ -462,13 +465,13 @@
         <select id="specialization" name="specialization" required>
             <option value="">Select Specialization</option>
             <option value="mechanical">Mechanical and allied branches</option>
-            <option value="electrical">Electrical and allied branches</option>
+            <option value="electrical">EEE/ECE and allied branches</option>
         </select><br>
 
         <label for="graduation">Year of Graduation:</label>
-        <input type="text" id="graduation" name="graduation" pattern="\d{4}" title="Please enter a valid year." required>
+        <input type="text" id="graduation" name="graduation" pattern="\d{4}" title="Please enter a valid year." placeholder="YYYY" required>
 
-        <label for="cgpa">CGPA:</label>
+        <label for="cgpa">CGPA (out of 10):</label>
         <input type="text" id="cgpa" name="cgpa" required>
 
         <label for="linkedin_profile_link">LinkedIn Profile Link:</label>

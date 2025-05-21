@@ -920,7 +920,7 @@
                     if (stripos($user['specialization'], 'mechanical') !== false) {
                         $branchMessage .= " for Mechanical and allied branches";
                     } elseif (stripos($user['specialization'], 'electrical') !== false) {
-                        $branchMessage .= " for Electrical and allied branches";
+                        $branchMessage .= " for EEE/ECE and allied branches";
                     }
                     echo "You are about to start the <strong>$branchMessage</strong>.";
                 ?>
