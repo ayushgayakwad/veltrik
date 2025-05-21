@@ -442,6 +442,18 @@ if ($time_left <= 0) {
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then((stream) => {
+                    stream.getTracks().forEach(track => track.stop());
+                })
+                .catch((err) => {
+                    window.location.href = "dashboard.php?permission_denied=1";
+                });
+        });
+        </script>
+
+    <script>
         var timeLeft = <?php echo $time_left; ?>;
         var timerDisplay = document.getElementById('timer');
 

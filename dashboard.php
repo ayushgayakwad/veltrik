@@ -48,6 +48,12 @@
     $currentDate = date("F j, Y");
     ?>
 
+    <?php if (isset($_GET['permission_denied'])): ?>
+        <script>
+            document.getElementById("permission-denied-popup").style.display = "flex";
+        </script>
+    <?php endif; ?>
+
     <?php if ($quiz_submitted): ?>
         <div class="popup">
             <div class="popup-content">
@@ -931,15 +937,48 @@
             <button class="btn btn-secondary" onclick="document.getElementById('already-taken-popup').style.display='none';">Close</button>
         </div>
     </div>
+
+    <div id="permission-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon"><i class="fas fa-video" style="color: #3b82f6;"></i></div>
+            <h2 class="popup-title">Enable Camera & Microphone</h2>
+            <p class="popup-text">
+                We need access to your camera and microphone to ensure the integrity of the assessment process.
+            </p>
+            <button class="btn btn-primary" onclick="requestMediaPermissions()">Allow Access</button>
+            <br><br>
+            <button class="btn btn-secondary" onclick="closePermissionPopup()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="permission-denied-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon"><i class="fas fa-times-circle" style="color: #ef4444;"></i></div>
+            <h2 class="popup-title">Permission Denied</h2>
+            <p class="popup-text">
+                You must allow camera and microphone access to proceed with the assessment.
+            </p>
+            <button class="btn btn-secondary" onclick="closePermissionDeniedPopup()">Close</button>
+        </div>
+    </div>
     
     <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('permission_denied') === '1') {
+                document.getElementById("permission-denied-popup").style.display = "flex";
+
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
+        });
         function showQuizPopup() {
             document.getElementById('instructions-popup').style.display = 'flex';
         }
     
         function continueToQuizPopup() {
             document.getElementById('instructions-popup').style.display = 'none';
-            document.getElementById('quiz-popup').style.display = 'flex';
+            document.getElementById('permission-popup').style.display = 'flex';
         }
     
         function closeInstructionsPopup() {
@@ -951,6 +990,28 @@
         }
         function showAlreadyTakenPopup() {
             document.getElementById('already-taken-popup').style.display = 'flex';
+        }
+
+        function requestMediaPermissions() {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then(function (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+
+                    document.getElementById('permission-popup').style.display = 'none';
+                    document.getElementById('quiz-popup').style.display = 'flex';
+                })
+                .catch(function (error) {
+                    document.getElementById('permission-popup').style.display = 'none';
+                    document.getElementById('permission-denied-popup').style.display = 'flex';
+                });
+        }
+
+        function closePermissionPopup() {
+            document.getElementById('permission-popup').style.display = 'none';
+        }
+
+        function closePermissionDeniedPopup() {
+            document.getElementById('permission-denied-popup').style.display = 'none';
         }
     </script>
 </body>
