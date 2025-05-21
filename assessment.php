@@ -394,16 +394,16 @@ if ($time_left <= 0) {
         .btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: var(--primary);
+            color: var(--bg-white);
             border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            cursor: pointer;
             text-decoration: none;
             border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: background-color 0.3s ease;
         }
 
         .btn:hover {
