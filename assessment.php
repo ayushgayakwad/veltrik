@@ -278,6 +278,37 @@ if ($time_left <= 0) {
             padding: 0;
             user-select: none;
         }
+        
+        .monitoring-banner {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        .monitoring-banner i {
+            margin-right: 10px;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         .container {
             max-width: 900px;
@@ -363,16 +394,16 @@ if ($time_left <= 0) {
         .btn {
             display: inline-flex;
             align-items: center;
-            padding: 12px 20px;
-            font-size: 16px;
-            background-color: var(--primary);
-            color: var(--bg-white);
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
             text-decoration: none;
             border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: background-color 0.3s ease;
         }
 
         .btn:hover {
@@ -388,10 +419,88 @@ if ($time_left <= 0) {
             color: var(--text-light);
             cursor: not-allowed;
         }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background-color: var(--bg-white);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--bg-light);
+        }
+        
+        .btn-icon {
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(8px);
+        }
+
+        .popup-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .popup-icon {
+            font-size: 3rem;
+            color: var(--success);
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-title {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .popup-text {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
 
     </style>
 </head>
 <body>
+    <div class="monitoring-banner">
+        <i class="fas fa-eye"></i> You are being monitored during this assessment. Any form of cheating will result in disqualification.
+    </div>
     <div class="container">
         <h1>
             <?php
@@ -446,6 +555,23 @@ if ($time_left <= 0) {
             </div>
         </form>
     </div>
+    
+    <div id="warning-popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon" style="color: #f59e0b;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="popup-title">
+                Warning: Attention Required
+            </div>
+            <div class="popup-text">
+                You are being monitored. Do not switch tabs or minimize the window during the assessment.
+            </div>
+            <button onclick="closePopup()" class="btn btn-primary">
+                Close
+            </button>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('contextmenu', function (e) {
@@ -469,7 +595,24 @@ if ($time_left <= 0) {
                     window.location.href = "dashboard.php?permission_denied=1";
                 });
         });
-        </script>
+        
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.getElementById('warning-popup').style.display = 'flex';
+            }
+        });
+    
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && (e.key === 't' || e.key === 'w')) {
+                e.preventDefault(); 
+                document.getElementById('warning-popup').style.display = 'flex';
+            }
+        });
+        
+        function closePopup() {
+            document.getElementById('warning-popup').style.display = 'none';
+        }
+    </script>
 
     <script>
         var timeLeft = <?php echo $time_left; ?>;

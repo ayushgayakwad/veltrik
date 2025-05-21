@@ -286,6 +286,7 @@
             transition: all 0.2s ease;
             cursor: pointer;
             text-decoration: none;
+            border: none;
         }
 
         .btn-primary {
