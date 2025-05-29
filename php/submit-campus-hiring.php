@@ -13,7 +13,27 @@ if ($conn->connect_error) {
     exit();
 }
 
-$tableCreationQuery = "CREATE TABLE IF NOT EXISTS crdf25 (
+$first_name = $_POST['first_name'];
+$last_name = $_POST['last_name'];
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$alt_phone = $_POST['alt_phone'];
+$dob = $_POST['dob'];
+$state = $_POST['state'];
+$college = $_POST['college'];
+$degree = $_POST['degree'];
+$specialization = $_POST['specialization'];
+$graduation_year = $_POST['graduation'];
+$cgpa = $_POST['cgpa'];
+$linkedin = $_POST['linkedin'];
+$roleArray = $_POST['role'];
+$role = implode(", ", $roleArray);
+
+$south_states = ["Karnataka", "Andhra Pradesh", "Telangana", "Kerala", "Tamil Nadu"];
+
+$table_name = in_array($state, $south_states) ? "crdf25_south" : "crdf25_north";
+
+$tableCreationQuery = "CREATE TABLE IF NOT EXISTS `$table_name` (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
@@ -28,7 +48,6 @@ $tableCreationQuery = "CREATE TABLE IF NOT EXISTS crdf25 (
     graduation_year VARCHAR(4) NOT NULL,
     cgpa VARCHAR(10) NOT NULL,
     linkedin VARCHAR(200) NOT NULL,
-    goals TEXT NOT NULL,
     role VARCHAR(200) NOT NULL DEFAULT 'Unknown',
     enrolled ENUM('true', 'false') NOT NULL DEFAULT 'false',
     confirmationEmailSent ENUM('true', 'false') NOT NULL DEFAULT 'false',
@@ -40,24 +59,7 @@ if ($conn->query($tableCreationQuery) === FALSE) {
     exit();
 }
 
-$first_name = $_POST['first_name'];
-$last_name = $_POST['last_name'];
-$email = $_POST['email'];
-$phone = $_POST['phone'];
-$alt_phone = $_POST['alt_phone'];
-$dob = $_POST['dob'];
-$state = $_POST['state'];
-$college = $_POST['college'];
-$degree = $_POST['degree'];
-$specialization = $_POST['specialization'];
-$graduation_year = $_POST['graduation'];
-$cgpa = $_POST['cgpa'];
-$linkedin = $_POST['linkedin'];
-$goals = $_POST['goals'];
-$roleArray = $_POST['role'];
-$role = implode(", ", $roleArray);
-
-$checkQuery = $conn->prepare("SELECT id FROM crdf25 WHERE email = ? OR phone = ?");
+$checkQuery = $conn->prepare("SELECT id FROM `$table_name` WHERE email = ? OR phone = ?");
 $checkQuery->bind_param("ss", $email, $phone);
 $checkQuery->execute();
 $checkQuery->store_result();
@@ -70,11 +72,11 @@ if ($checkQuery->num_rows > 0) {
 
 $checkQuery->close();
 
-$stmt = $conn->prepare("INSERT INTO crdf25 
-    (first_name, last_name, email, phone, alt_phone, dob, state, college, degree, specialization, graduation_year, cgpa, linkedin, goals, role, enrolled, confirmationEmailSent) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'false', 'false')");
+$stmt = $conn->prepare("INSERT INTO `$table_name` 
+    (first_name, last_name, email, phone, alt_phone, dob, state, college, degree, specialization, graduation_year, cgpa, linkedin, role, enrolled, confirmationEmailSent) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'false', 'false')");
 
-$stmt->bind_param("sssssssssssssss", $first_name, $last_name, $email, $phone, $alt_phone, $dob, $state, $college, $degree, $specialization, $graduation_year, $cgpa, $linkedin, $goals, $role);
+$stmt->bind_param("ssssssssssssss", $first_name, $last_name, $email, $phone, $alt_phone, $dob, $state, $college, $degree, $specialization, $graduation_year, $cgpa, $linkedin, $role);
 
 if ($stmt->execute()) {
     echo json_encode(["success" => true]);
