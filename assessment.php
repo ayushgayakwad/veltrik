@@ -190,7 +190,7 @@ if ($quiz_result) {
     
 }
 
-$time_left = 1500 - (time() - $_SESSION['quiz_start_time']);
+$time_left = 1200 - (time() - $_SESSION['quiz_start_time']);
 if ($time_left <= 0) {
     if (!isset($_SESSION['quiz_submitted'])) {
         $final_marks = 0;
