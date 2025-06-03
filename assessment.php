@@ -1,6 +1,58 @@
 <?php
 session_start();
 
+if (isset($_SESSION['quiz_submitted']) && $_SESSION['quiz_submitted'] === true) {
+    $temp_user_id = $_SESSION['user_id'] ?? null;
+    $temp_specialization = $_SESSION['specialization'] ?? null;
+
+    session_unset();
+    session_destroy();
+    session_start();
+    session_regenerate_id(true);
+
+    $_SESSION['user_id'] = $temp_user_id;
+    $_SESSION['specialization'] = $temp_specialization;
+
+    $_SESSION['quiz_start_time'] = time();
+    $_SESSION['questions_answered'] = [];
+    $_SESSION['question_order'] = [];
+    $_SESSION['current_question_index'] = 0;
+    $_SESSION['total_marks'] = 0;
+    $_SESSION['answers'] = [];
+    $_SESSION['quiz_submitted'] = false;
+
+    $_SESSION['quiz_reset_done'] = true;
+
+    header("Location: assessment.php");
+    exit();
+}
+
+if (isset($_GET['reset_quiz']) && $_GET['reset_quiz'] == '1') {
+    $temp_user_id = $_SESSION['user_id'] ?? null;
+    $temp_specialization = $_SESSION['specialization'] ?? null;
+
+    session_unset();
+    session_destroy();
+    session_start();
+    session_regenerate_id(true);
+
+    $_SESSION['user_id'] = $temp_user_id;
+    $_SESSION['specialization'] = $temp_specialization;
+
+    $_SESSION['quiz_start_time'] = time();
+    $_SESSION['questions_answered'] = [];
+    $_SESSION['question_order'] = [];
+    $_SESSION['current_question_index'] = 0;
+    $_SESSION['total_marks'] = 0;
+    $_SESSION['answers'] = [];
+    $_SESSION['quiz_submitted'] = false;
+
+    $_SESSION['quiz_reset_done'] = true;
+
+    header("Location: assessment.php");
+    exit();
+}
+
 if (isset($_GET['quiz_submitted']) && $_GET['quiz_submitted'] == 1) {
     $quiz_submitted = true;
 } else {
@@ -23,6 +75,30 @@ if (isset($_GET['debug']) && $_GET['debug'] == 1) {
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
+    exit();
+}
+
+$temp_user_id = $_SESSION['user_id'];
+$temp_specialization = $_SESSION['specialization'] ?? null;
+
+if (isset($_SESSION['quiz_start_time']) && !isset($_SESSION['quiz_session_reset_done'])) {
+    session_unset();
+    session_destroy();
+    session_start();
+    session_regenerate_id(true);
+
+    $_SESSION['user_id'] = $temp_user_id;
+    $_SESSION['specialization'] = $temp_specialization;
+
+    $_SESSION['quiz_start_time'] = time();
+    $_SESSION['questions_answered'] = [];
+    $_SESSION['question_order'] = [];
+    $_SESSION['current_question_index'] = 0;
+    $_SESSION['total_marks'] = 0;
+    $_SESSION['answers'] = [];
+    $_SESSION['quiz_session_reset_done'] = true;
+
+    header("Location: assessment.php");
     exit();
 }
 
@@ -137,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-if (!isset($_SESSION['question_order'])) {
+if (!isset($_SESSION['question_order']) || empty($_SESSION['question_order'])) {
     $stmt = $pdo->query("SELECT id FROM $question_table ORDER BY RAND() LIMIT 50");
     $question_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
@@ -169,10 +245,6 @@ if (isset($_GET['previous']) && $_SESSION['current_question_index'] > 0) {
     $_SESSION['current_question_index']--;
     header("Location: assessment.php");
     exit();
-}
-
-if (!isset($_SESSION['quiz_start_time'])) {
-    $_SESSION['quiz_start_time'] = time(); 
 }
 
 try {
