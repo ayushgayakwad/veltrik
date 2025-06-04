@@ -44,27 +44,23 @@
         .then((userCredential) => {
           const user = userCredential.user;
 
-          if (user.emailVerified) {
-            fetch('php/set-session.php', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email: user.email })
-            })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success) {
-                window.location.href = "dashboard.php";
-              } else {
-                alert("Session could not be established. Try again.");
-              }
-            })
-            .catch(error => {
-              console.error("Error setting session:", error);
-              alert("An error occurred. Please try again.");
-            });
-          } else {
-            showVerificationReminder();
-          }
+          fetch('php/set-session.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: user.email })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              window.location.href = "dashboard.php";
+            } else {
+              alert("Session could not be established. Try again.");
+            }
+          })
+          .catch(error => {
+            console.error("Error setting session:", error);
+            alert("An error occurred. Please try again.");
+          });
         })
         .catch((error) => {
           console.error("Login error:", error);
@@ -390,7 +386,7 @@
       </p>
     </div>
   </div>
-  <div id="email-verification-popup" class="popup" style="display: none;">
+  <!-- <div id="email-verification-popup" class="popup" style="display: none;">
     <div class="popup-content">
       <div class="popup-icon">
         <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
@@ -399,7 +395,7 @@
       <p class="popup-text">Please verify your email before logging in. Check your inbox for the verification link.</p>
       <button class="btn btn-secondary" onclick="document.getElementById('email-verification-popup').style.display='none';">Close</button>
     </div>
-  </div>
+  </div> -->
   <div id="error-popup" class="popup" style="display: none;">
       <div class="popup-content">
         <div class="popup-icon">
@@ -412,9 +408,9 @@
     </div>
 </body>
 <script>
-  function showVerificationReminder() {
-    document.getElementById('email-verification-popup').style.display = 'flex';
-  }
+  // function showVerificationReminder() {
+  //   document.getElementById('email-verification-popup').style.display = 'flex';
+  // }
 
   function showErrorPopup() {
     document.getElementById('error-popup').style.display = 'flex';
@@ -424,9 +420,9 @@
     document.getElementById('error-popup').style.display = 'none';
   }
 </script>
-<script>
+<!-- <script>
   function showVerificationReminder() {
     document.getElementById('email-verification-popup').style.display = 'flex';
   }
-</script>
+</script> -->
 </html>

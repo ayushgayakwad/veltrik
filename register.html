@@ -43,17 +43,20 @@
       auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           const user = userCredential.user;
+
+          saveUserData(user);
+          document.getElementById("registerForm").reset();
     
-          user.sendEmailVerification()
-            .then(() => {
-              showVerificationPopup();
-              saveUserData(user);
-              document.getElementById("registerForm").reset();
-            })
-            .catch((error) => {
-              console.error("Email verification error:", error);
-              document.getElementById("loading-spinner").style.display = "none";
-            });
+        //   user.sendEmailVerification()
+        //     .then(() => {
+        //       showVerificationPopup();
+        //       saveUserData(user);
+        //       document.getElementById("registerForm").reset();
+        //     })
+        //     .catch((error) => {
+        //       console.error("Email verification error:", error);
+        //       document.getElementById("loading-spinner").style.display = "none";
+        //     });
         })
         .catch((error) => {
           console.error("Registration error:", error);
@@ -496,7 +499,7 @@
         
     </form>
     <p class="login-text">Have an account? <a href="login.html">Login here</a>.</p>
-    <div id="verification-popup" class="popup" style="display: none;">
+    <!-- <div id="verification-popup" class="popup" style="display: none;">
         <div class="popup-content">
             <div class="popup-icon">
                 <i class="fas fa-envelope" style="color: var(--success);"></i>
@@ -505,7 +508,7 @@
             <p class="popup-text">Please check your email inbox and verify your email address to complete registration.</p>
             <button class="btn btn-secondary" onclick="window.location.href='login.html'">Continue</button>
         </div>
-    </div>
+    </div> -->
     <div id="announcement-popup" class="popup" style="display: flex;">
       <div class="popup-content">
         <div class="popup-icon">
@@ -520,11 +523,11 @@
       </div>
     </div>
 </body>
-<script>
+<!-- <script>
     function showVerificationPopup() {
         document.getElementById('verification-popup').style.display = 'flex';
     }
-</script>
+</script> -->
 <script>
     const collegesByState = {
             "Andhra Pradesh": [
