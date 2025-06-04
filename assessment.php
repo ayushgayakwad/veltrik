@@ -1,58 +1,6 @@
 <?php
 session_start();
 
-if (isset($_SESSION['quiz_submitted']) && $_SESSION['quiz_submitted'] === true) {
-    $temp_user_id = $_SESSION['user_id'] ?? null;
-    $temp_specialization = $_SESSION['specialization'] ?? null;
-
-    session_unset();
-    session_destroy();
-    session_start();
-    session_regenerate_id(true);
-
-    $_SESSION['user_id'] = $temp_user_id;
-    $_SESSION['specialization'] = $temp_specialization;
-
-    $_SESSION['quiz_start_time'] = time();
-    $_SESSION['questions_answered'] = [];
-    $_SESSION['question_order'] = [];
-    $_SESSION['current_question_index'] = 0;
-    $_SESSION['total_marks'] = 0;
-    $_SESSION['answers'] = [];
-    $_SESSION['quiz_submitted'] = false;
-
-    $_SESSION['quiz_reset_done'] = true;
-
-    header("Location: assessment.php");
-    exit();
-}
-
-if (isset($_GET['reset_quiz']) && $_GET['reset_quiz'] == '1') {
-    $temp_user_id = $_SESSION['user_id'] ?? null;
-    $temp_specialization = $_SESSION['specialization'] ?? null;
-
-    session_unset();
-    session_destroy();
-    session_start();
-    session_regenerate_id(true);
-
-    $_SESSION['user_id'] = $temp_user_id;
-    $_SESSION['specialization'] = $temp_specialization;
-
-    $_SESSION['quiz_start_time'] = time();
-    $_SESSION['questions_answered'] = [];
-    $_SESSION['question_order'] = [];
-    $_SESSION['current_question_index'] = 0;
-    $_SESSION['total_marks'] = 0;
-    $_SESSION['answers'] = [];
-    $_SESSION['quiz_submitted'] = false;
-
-    $_SESSION['quiz_reset_done'] = true;
-
-    header("Location: assessment.php");
-    exit();
-}
-
 if (isset($_GET['quiz_submitted']) && $_GET['quiz_submitted'] == 1) {
     $quiz_submitted = true;
 } else {
@@ -75,30 +23,6 @@ if (isset($_GET['debug']) && $_GET['debug'] == 1) {
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
-    exit();
-}
-
-$temp_user_id = $_SESSION['user_id'];
-$temp_specialization = $_SESSION['specialization'] ?? null;
-
-if (isset($_SESSION['quiz_start_time']) && !isset($_SESSION['quiz_session_reset_done'])) {
-    session_unset();
-    session_destroy();
-    session_start();
-    session_regenerate_id(true);
-
-    $_SESSION['user_id'] = $temp_user_id;
-    $_SESSION['specialization'] = $temp_specialization;
-
-    $_SESSION['quiz_start_time'] = time();
-    $_SESSION['questions_answered'] = [];
-    $_SESSION['question_order'] = [];
-    $_SESSION['current_question_index'] = 0;
-    $_SESSION['total_marks'] = 0;
-    $_SESSION['answers'] = [];
-    $_SESSION['quiz_session_reset_done'] = true;
-
-    header("Location: assessment.php");
     exit();
 }
 
@@ -184,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (isset($_POST['submit_quiz']) || (isset($_POST['forced_submit']) && $_POST['forced_submit'] == "1")) {
+    if (isset($_POST['submit_quiz'])) {
         $final_marks = 0;
 
         foreach ($_SESSION['answers'] as $qid => $answer) {
@@ -213,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-if (!isset($_SESSION['question_order']) || empty($_SESSION['question_order'])) {
+if (!isset($_SESSION['question_order'])) {
     $stmt = $pdo->query("SELECT id FROM $question_table ORDER BY RAND() LIMIT 50");
     $question_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
@@ -245,6 +169,10 @@ if (isset($_GET['previous']) && $_SESSION['current_question_index'] > 0) {
     $_SESSION['current_question_index']--;
     header("Location: assessment.php");
     exit();
+}
+
+if (!isset($_SESSION['quiz_start_time'])) {
+    $_SESSION['quiz_start_time'] = time(); 
 }
 
 try {
@@ -613,8 +541,7 @@ if ($time_left <= 0) {
             </div>
 
             <input type="hidden" name="question_id" value="<?php echo $question['id']; ?>">
-            <input type="hidden" name="forced_submit" id="forced_submit" value="0">
-
+        
             <div class="btn-container">
                 <?php if ($current_question_index > 0): ?>
                     <a href="assessment.php?previous=true" class="btn"><i class="fas fa-chevron-left"></i> Previous</a>
@@ -627,23 +554,6 @@ if ($time_left <= 0) {
                 <?php endif; ?>
             </div>
         </form>
-    </div>
-    
-    <div id="warning-popup" class="popup" style="display: none;">
-        <div class="popup-content">
-            <div class="popup-icon" style="color: #f59e0b;">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <div class="popup-title">
-                Warning: Attention Required
-            </div>
-            <div class="popup-text">
-                You are being monitored. Do not switch tabs or minimize the window during the assessment.
-            </div>
-            <button onclick="closePopup()" class="btn btn-primary">
-                Close
-            </button>
-        </div>
     </div>
 
     <script>
@@ -659,8 +569,6 @@ if ($time_left <= 0) {
     </script>
 
     <script>
-        let warningShown = false;
-
         document.addEventListener('DOMContentLoaded', () => {
             navigator.mediaDevices.getUserMedia({ video: true, audio: true })
                 .then((stream) => {
@@ -670,41 +578,6 @@ if ($time_left <= 0) {
                     window.location.href = "dashboard.php?permission_denied=1";
                 });
         });
-
-        function handleViolation() {
-            if (!warningShown) {
-                warningShown = true;
-                showWarningPopup();
-            } else {
-                document.getElementById('forced_submit').value = "1";
-                document.forms[0].submit();
-            }
-        }
-        
-        document.addEventListener('visibilitychange', function () {
-            if (document.hidden) {
-                handleViolation();
-            }
-        });
-    
-        window.addEventListener('blur', function () {
-            handleViolation();
-        });
-
-        document.addEventListener('keydown', function (e) {
-            if (e.ctrlKey && (e.key === 't' || e.key === 'w')) {
-                e.preventDefault();
-                handleViolation();
-            }
-        });
-
-        function showWarningPopup() {
-            document.getElementById('warning-popup').style.display = 'flex';
-        }
-        
-        function closePopup() {
-            document.getElementById('warning-popup').style.display = 'none';
-        }
     </script>
 
     <script>
